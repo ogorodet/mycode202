@@ -1,0 +1,47 @@
+- name: Use Redfish to gather CPU Inventory, and Virtual Media Information
+  hosts: Redfish
+  connection: local
+  gather_facts: false
+
+  collections:
+    community.general
+
+  tasks:
+  - name: Get CPU Inventory
+    community.general.redfish_info:
+      category: Systems
+      command: GetCpuInventory
+      baseuri: "{{ baseuri }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+    register: cpuInv
+
+  - name: Display CPU data
+    debug:
+      var: cpuInv
+
+  - name: Get memory inventory
+    community.general.redfish_info:
+      category: Systems
+      command: GetMemoryInventory
+      baseuri: "{{ baseuri }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+    register: result
+   - name: Show Results
+     debug:
+       msg: {{ result }}
+
+  - name: Get Volume Inventory
+    community.general.redfish_info:
+      category: Systems
+      command: GetVolumeInventory
+      baseuri: "{{ baseuri }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+    register: result
+
+  - name: Print fetched information
+    ansible.builtin.debug:
+      msg: "{{ result.redfish_facts.volume.entries | to_nice_json }}"
+
