@@ -1,0 +1,25 @@
+---
+- name: Assert OS distribution
+  hosts: planetexpress
+  connection: ssh
+  gather_facts: true
+
+  tasks:
+
+  - name: Assert that the targets have a ansible_distribution value of Ubuntu
+    ansible.builtin.assert:
+      that: 
+        - ansible_facts.os_family == "Debian" 
+        - ansible_facts.distribution_major_version  == "22"
+      fail_msg: "Ubuntu was not detected."
+      success_msg: "Ubuntu indeed and ver is > 22"
+
+
+  - name: Assert that the targets have a ansible_distribution value of Redhat
+    ansible.builtin.assert:
+      that: 
+        - ansible_facts.os_family == "RedHat" 
+        - ansible_facts.distribution_major_version  == "8"
+      fail_msg: "Ubuntu was not detected."
+      success_msg: "redhat indeed and ver is > 8"
+
