@@ -22,3 +22,8 @@
           debug:
             msg: "{{ result.redfish_facts.cpu.entries | to_nice_json }}"   # "pretty print" JSON
 
+        - name: Write the _info we just collected to a file
+          copy:
+            content: "{{ result.redfish_facts.cpu.entries | to_nice_json }}"
+            dest: outputfile.json
+
